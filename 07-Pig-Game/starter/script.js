@@ -23,6 +23,7 @@ let currentScore      = 0;
 let currentPlayer     = 0;
 let firstPlayerTotal  = 0
 let secondPlayerTotal = 0;
+let winnerTarget      = 100;
 let isGameActive      = true;
 
 // Roll the dice update current player current score
@@ -67,7 +68,7 @@ btnHold.addEventListener( 'click', function () {
         firstPlayerTotal += currentScore;
         firstScoreElement.textContent = firstPlayerTotal; // Add current score to the first player total score
 
-        if ( firstPlayerTotal > 20 ) {
+        if ( firstPlayerTotal > winnerTarget ) {
             playerWon();
         }
 
@@ -75,13 +76,16 @@ btnHold.addEventListener( 'click', function () {
         secondPlayerTotal += currentScore;
         secondScoreElement.textContent = secondPlayerTotal; // Add current score to the second player total score
 
-        if ( secondPlayerTotal > 20 ) {
+        if ( secondPlayerTotal > winnerTarget ) {
             playerWon();
         }
     }
 
     switchPlayer();
 } );
+
+// Start a new game
+btnNew.addEventListener( 'click', startNewGame );
 
 function switchPlayer() {
 
@@ -95,11 +99,15 @@ function switchPlayer() {
     if ( currentPlayer === 0 ) {
         firstPlayer.classList.remove( 'player--active' );
         secondPlayer.classList.add( 'player--active' );
-        currentPlayer = 1;
+
+        firstCurrentScoreElement.textContent = 0;
+        currentPlayer                        = 1;
     } else {
         secondPlayer.classList.remove( 'player--active' );
         firstPlayer.classList.add( 'player--active' );
-        currentPlayer = 0;
+
+        secondCurrentScoreElement.textContent = 0;
+        currentPlayer                         = 0;
     }
 }
 
@@ -108,11 +116,37 @@ function playerWon() {
     if ( currentPlayer === 0 ) {
         firstPlayer.classList.remove( 'player--active' );
         firstPlayer.classList.add( 'player--winner' );
+        firstCurrentScoreElement.textContent = 0;
     } else {
         secondPlayer.classList.remove( 'player--active' );
         secondPlayer.classList.add( 'player--winner' );
+        secondCurrentScoreElement.textContent = 0;
     }
 
     diceImage.classList.add( 'hidden' ); // Hide the dice
     isGameActive = false; // End the game
+}
+
+function startNewGame() {
+
+    isGameActive      = true;
+    currentPlayer     = 0;
+    currentScore      = 0;
+    firstPlayerTotal  = 0;
+    secondPlayerTotal = 0;
+
+    firstScoreElement.textContent  = 0;
+    secondScoreElement.textContent = 0;
+
+    firstCurrentScoreElement.textContent  = 0;
+    secondCurrentScoreElement.textContent = 0;
+
+    firstPlayer.classList.remove( 'player--winner' );
+    secondPlayer.classList.remove( 'player--winner' );
+
+    secondPlayer.classList.remove( 'player--active' );
+    firstPlayer.classList.add( 'player--active' );
+
+    diceImage.classList.add( 'hidden' );
+
 }
